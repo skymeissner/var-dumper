@@ -27,7 +27,7 @@ if (!function_exists('d')) {
     /**
      * @author Nicolas Grekas <p@tchwork.com>
      */
-    function dump($var, $depth)
+    function d($var, $depth)
     {
         foreach (func_get_args() as $var) {
             VarDumper::dump($var);
