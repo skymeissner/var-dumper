@@ -1,15 +1,9 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
 use Symfony\Component\VarDumper\VarDumper;
+use Symfony\Component\VarDumper\Dumper\CliDumper;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
 
 if (!function_exists('dump')) {
     /**
@@ -24,14 +18,31 @@ if (!function_exists('dump')) {
 }
 
 if (!function_exists('d')) {
-    /**
-     * @author Nicolas Grekas <p@tchwork.com>
-     */
-    function d($var, $depth)
+	
+    
+	function d($data, $depth = 0)
     {
-        foreach (func_get_args() as $var) {
-            VarDumper::dump($var);
+		$cloner = new VarCloner();
+		$dumper = new CliDumper();
+		
+		$data = $cloner->cloneVar($data);
+		if ($depth) {
+            $data = $data->withMaxDepth($depth);
+
         }
+		
+        $dumper->dump($data);
+        
+    }
+}
+
+if (!function_exists('dd')) {
+	
+
+	function dd($var, $depth)
+    {
+        d($var, $depth);
+		die();
     }
 }
 
