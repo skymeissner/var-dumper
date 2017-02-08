@@ -39,7 +39,7 @@ if (!function_exists('d')) {
 if (!function_exists('dd')) {
 	
 
-	function dd($var, $depth)
+	function dd($var, $depth = 0)
     {
         d($var, $depth);
 		die();
