@@ -3,6 +3,7 @@
 
 use Symfony\Component\VarDumper\VarDumper;
 use Symfony\Component\VarDumper\Dumper\CliDumper;
+use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 
 if (!function_exists('dump')) {
@@ -20,17 +21,22 @@ if (!function_exists('dump')) {
 if (!function_exists('d')) {
 	
     
-	function d($data, $depth = 0)
-    {
-		$cloner = new VarCloner();
-		$dumper = new CliDumper();
+	function d($data, $depth = null, $maxItems = null)
+    {	
 		
+		$cloner = new VarCloner();
+		$dumper = 'cli' === PHP_SAPI ? new CliDumper() : new HtmlDumper();
+
+		if ($maxItems) {
+			$cloner->setMaxItems($maxItems);
+		}
+
 		$data = $cloner->cloneVar($data);
 		if ($depth) {
             $data = $data->withMaxDepth($depth);
 
         }
-		
+
         $dumper->dump($data);
         
     }
@@ -39,9 +45,9 @@ if (!function_exists('d')) {
 if (!function_exists('dd')) {
 	
 
-	function dd($var, $depth = 0)
+	function dd($data, $depth = null, $maxItems = null)
     {
-        d($var, $depth);
+        d($data, $depth, $maxItems);
 		die();
     }
 }
